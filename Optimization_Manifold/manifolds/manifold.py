@@ -267,3 +267,35 @@ class Sphere(Manifold):
 
     def norm_vec(self, x: np.ndarray, u: np.ndarray, axis: int = -1) -> np.ndarray:
         return np.linalg.norm(u, axis=axis, keepdims=True)
+
+    def ehess2rhess(
+        self,
+        x: np.ndarray,
+        egrad: np.ndarray,
+        ehess_u: np.ndarray,
+        u: np.ndarray,
+    ) -> np.ndarray:
+        """
+        将欧氏 Hessian-向量积转换为黎曼 Hessian-向量积。
+
+        球面公式：
+            Hess_R f(x)[u] = P_x(ehess_u) - <egrad, x> * u
+
+        其中 P_x(v) = v - <v, x> * x 是到切空间的正交投影。
+
+        参数
+        ----
+        x      : 流形上当前点
+        egrad  : 欧氏梯度 ∇f(x)
+        ehess_u: 欧氏 Hessian-向量积 ∇²f(x)[u]
+        u      : 切向量方向
+
+        返回
+        ----
+        黎曼 Hessian-向量积 Hess_R f(x)[u]，属于 T_x S^{n-1}
+        """
+        # P_x(ehess_u) = ehess_u - <ehess_u, x> * x
+        proj_ehess = ehess_u - np.dot(ehess_u, x) * x
+        # <egrad, x>：曲率项
+        alpha = np.dot(egrad, x)
+        return proj_ehess - alpha * u

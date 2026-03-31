@@ -49,6 +49,10 @@ class RayleighQuotientSphereProblem:
         """黎曼梯度：将欧氏梯度投影到球面切空间。"""
         return self.manifold.egrad2rgrad(x, self.egrad(x))
 
+    def ehess_vec(self, x: np.ndarray, u: np.ndarray) -> np.ndarray:
+        """欧氏 Hessian-向量积 ∇²f(x)[u] = 2Au（与 x 无关）。"""
+        return 2.0 * (self.A @ u)
+
     # ===========================
     # 初始化与评估
     # ===========================
