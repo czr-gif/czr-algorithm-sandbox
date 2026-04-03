@@ -1,0 +1,16 @@
+seed: 42
+device: cpu
+
+# Env
+rollout_len: 2048
+
+# PPO
+gamma: 0.99
+lam: 0.95
+clip_eps: 0.2
+epochs: 10
+lr: 3.0e-4
+
+# Training
+n_updates: 200
+log_dir: runs/baseline
